@@ -1,84 +1,96 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { menuItems } from "@/lib/data";
+import { menuCategories } from "@/lib/data";
 
 export default function MenuSection() {
   const [active, setActive] = useState(0);
   const ref = useRef(null);
-  const inView = useInView(ref, { once:true, margin:"-80px" });
+  const iv = useInView(ref, { once:true, margin:"-80px" });
 
   return (
-    <section id="menu" ref={ref} className="section" style={{ background:"#FFF5E6" }}>
-      <div className="wrap">
-        <div className="text-center mb-14">
-          <motion.div initial={{ opacity:0, scale:0.8 }} animate={inView?{opacity:1,scale:1}:{}}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-bold text-sm mb-5"
-            style={{ background:"#FFE0B2", color:"#B8560A" }}>
-            📋 Co nabízíme
-          </motion.div>
-          <div className="overflow-hidden">
-            <motion.h2 className="font-display text-5xl md:text-6xl font-semibold" style={{ color:"#2D1B10" }}
-              initial={{ y:"110%" }} animate={inView?{y:0}:{}} transition={{ duration:0.9, ease:[0.22,1,0.36,1] }}>
-              Naše <span className="grad-yellow">menu</span> 🍽️
-            </motion.h2>
+    <section id="menu" ref={ref} className="section relative overflow-hidden"
+      style={{ background:"#0F0700" }}>
+      {/* BG decoration */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage:`radial-gradient(ellipse at 10% 50%, rgba(196,117,42,.08) 0%, transparent 55%),
+                         radial-gradient(ellipse at 90% 20%, rgba(212,64,106,.05) 0%, transparent 45%)` }} />
+
+      <div className="wrap relative">
+        <div className="grid md:grid-cols-2 gap-10 items-end mb-16">
+          <div>
+            <motion.div initial={{ opacity:0 }} animate={iv?{opacity:1}:{}}
+              className="t-label mb-6" style={{ color:"var(--caramel)", letterSpacing:".3em" }}>
+              ✦ Co nabízíme
+            </motion.div>
+            <div className="overflow-hidden">
+              <motion.h2 className="t-display font-black italic" style={{ fontSize:"clamp(44px,6vw,88px)", color:"var(--cream)", fontFamily:"var(--display)", lineHeight:.95 }}
+                initial={{ y:"110%" }} animate={iv?{y:0}:{}} transition={{ duration:1, ease:[0.22,1,0.36,1] }}>
+                Naše<br/><span className="grad-text">menu</span>
+              </motion.h2>
+            </div>
           </div>
+          {/* Tab switcher */}
+          <motion.div initial={{ opacity:0, y:16 }} animate={iv?{opacity:1,y:0}:{}} transition={{ delay:.3 }}
+            className="flex flex-wrap gap-2 md:justify-end">
+            {menuCategories.map((cat,i)=>(
+              <button key={cat.id} onClick={()=>setActive(i)}
+                className="relative px-6 py-2.5 rounded-full cursor-none transition-all text-[10px] font-bold tracking-[.18em] uppercase"
+                style={{
+                  background: active===i ? "var(--caramel)" : "rgba(251,245,235,.04)",
+                  color: active===i ? "var(--ink)" : "rgba(251,245,235,.4)",
+                  border: active===i ? "none" : "1px solid rgba(212,175,55,.15)",
+                  transform: active===i ? "scale(1.04)" : "scale(1)",
+                }}>
+                {cat.label}
+              </button>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Tabs */}
-        <motion.div initial={{ opacity:0, y:16 }} animate={inView?{opacity:1,y:0}:{}} transition={{ delay:0.2 }}
-          className="flex gap-2 mb-10 justify-center flex-wrap">
-          {menuItems.map((tab, i) => (
-            <button key={tab.cat} onClick={() => setActive(i)}
-              className="relative px-6 py-3 rounded-2xl text-[14px] font-bold cursor-none transition-all flex items-center gap-2"
-              style={{
-                background: active===i ? tab.color : "white",
-                color: active===i ? "white" : "#5C3317",
-                boxShadow: active===i ? `0 8px 24px ${tab.color}50` : "0 2px 8px rgba(0,0,0,0.06)",
-                transform: active===i ? "scale(1.05)" : "scale(1)",
-                border: `2px solid ${active===i ? tab.color : "transparent"}`,
-              }}>
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Items */}
-        <motion.div key={active} initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4 }}
-          className="space-y-3 max-w-2xl mx-auto">
-          {menuItems[active].items.map((item, i) => (
+        <motion.div key={active} initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration:.45 }} className="space-y-2">
+          {menuCategories[active].items.map((item,i)=>(
             <motion.div key={`${active}-${i}`} initial={{ opacity:0, x:-20 }} animate={{ opacity:1, x:0 }}
-              transition={{ delay:i*0.07 }}
-              whileHover={{ x:6, boxShadow:"0 8px 32px rgba(0,0,0,0.1)" }}
-              className="flex items-center justify-between bg-white rounded-2xl px-6 py-5 cursor-none relative overflow-hidden"
-              style={{ border:`2px solid ${item.hot ? menuItems[active].color+"40" : "transparent"}`,
-                boxShadow: item.hot ? `0 4px 20px ${menuItems[active].color}25` : "0 2px 12px rgba(0,0,0,0.05)" }}>
-              {item.hot && (
-                <div className="absolute top-0 right-0 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl"
-                  style={{ background:menuItems[active].color }}>
-                  🔥 HOT
+              transition={{ delay:i*.06 }} whileHover={{ x:5 }}
+              className="flex items-center justify-between rounded-2xl px-7 py-5 cursor-none group relative overflow-hidden"
+              style={{
+                background: item.featured ? "rgba(196,117,42,.07)" : "rgba(251,245,235,.025)",
+                border: item.featured ? "1px solid rgba(196,117,42,.2)" : "1px solid rgba(255,255,255,.04)",
+              }}>
+              <motion.div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+                style={{ background:"linear-gradient(90deg,rgba(196,117,42,.06),transparent)" }} />
+
+              <div className="flex items-center gap-4 relative">
+                {item.featured && (
+                  <span className="t-label px-3 py-1.5 rounded-full text-ink flex-shrink-0"
+                    style={{ background:"var(--caramel)", fontSize:"8px", letterSpacing:".12em" }}>
+                    ✦ Featured
+                  </span>
+                )}
+                <div>
+                  <div className="font-semibold text-[15px]" style={{ color:"var(--cream)" }}>{item.name}</div>
+                  <div className="text-[12px] mt-0.5" style={{ color:"rgba(251,245,235,.35)", fontFamily:"var(--body)" }}>{item.desc}</div>
                 </div>
-              )}
-              <div>
-                <div className="font-bold text-[15px]" style={{ color:"#2D1B10" }}>{item.name}</div>
-                <div className="text-[13px] mt-0.5" style={{ color:"#6B4226", opacity:0.7 }}>{item.desc}</div>
               </div>
-              <div className="font-display text-2xl font-bold ml-4 whitespace-nowrap" style={{ color:menuItems[active].color }}>
-                {item.price} Kč
+
+              <div className="t-display text-2xl italic font-bold relative ml-4 whitespace-nowrap"
+                style={{ color:"var(--caramel)", fontFamily:"var(--display)" }}>
+                {item.price}
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Note */}
-        <motion.div initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ delay:0.6 }} className="text-center mt-10">
-          <p className="text-[13px] font-semibold mb-5" style={{ color:"rgba(92,51,23,0.4)" }}>
-            🎂 Zmrzlinové dorty min. 72h předem · Alergeny k dispozici u pokladny
+        <motion.div initial={{ opacity:0 }} animate={iv?{opacity:1}:{}} transition={{ delay:.6 }}
+          className="mt-12 text-center">
+          <p className="t-label mb-5" style={{ letterSpacing:".2em", opacity:.3 }}>
+            Zmrzlinové dorty min. 72 hodin předem · Alergeny k dispozici u pokladny
           </p>
-          <motion.a href="#kontakt" whileHover={{ scale:1.05 }} className="inline-flex items-center gap-2 font-bold text-[14px] px-7 py-3 rounded-full border-2 border-dashed transition-all"
-            style={{ borderColor:"#FF6B9D", color:"#FF6B9D", textDecoration:"none" }}>
-            🎂 Objednat dort na míru →
+          <motion.a href="#kontakt" whileHover={{ borderColor:"rgba(212,175,55,.4)", color:"var(--gold)" }}
+            className="glass px-8 py-3 rounded-full t-label inline-block transition-all"
+            style={{ textDecoration:"none", color:"rgba(251,245,235,.4)", letterSpacing:".2em" }}>
+            Objednat dort na míru →
           </motion.a>
         </motion.div>
       </div>

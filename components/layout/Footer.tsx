@@ -3,58 +3,53 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden pt-16 pb-8 px-6 md:px-10" style={{ background:"#2D1B10" }}>
+    <footer className="relative overflow-hidden pt-20 pb-10 px-6 md:px-10" style={{ background:"#050200" }}>
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <span className="font-display text-[30vw] font-bold text-white/[0.03] whitespace-nowrap leading-none">TRIO</span>
+        <span className="t-display font-black italic text-white/[0.02] whitespace-nowrap leading-none"
+          style={{ fontSize:"28vw", fontFamily:"var(--display)" }}>TRIO</span>
       </div>
       <div className="max-w-6xl mx-auto relative">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+        <div className="grid md:grid-cols-3 gap-12 mb-16">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-3xl">🍦</span>
-              <span className="font-display text-3xl font-semibold text-white">TRIO</span>
-            </div>
-            <p className="text-[13px] leading-relaxed font-semibold" style={{ color:"rgba(255,245,230,0.4)" }}>
+            <div className="t-display text-3xl italic font-bold text-cream mb-4" style={{ fontFamily:"var(--display)" }}>TRIO</div>
+            <p className="t-body text-[13px] leading-relaxed" style={{ color:"rgba(251,245,235,.3)" }}>
               Točená zmrzlina s tradicí od roku 2009. Belgická čokoláda, madagaskarská vanilka, čerstvá jahoda. Mladá Boleslav.
             </p>
-            <div className="flex gap-3 mt-5">
-              {["📸","💬","📧"].map((icon,i)=>(
-                <motion.a key={i} href="#" whileHover={{ scale:1.15, y:-3 }}
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-lg cursor-none"
-                  style={{ background:"rgba(255,107,157,0.15)", border:"1.5px solid rgba(255,107,157,0.3)", textDecoration:"none" }}>
-                  {icon}
-                </motion.a>
+            <div className="flex gap-3 mt-6">
+              {["📸","💬","✉️"].map((icon,i)=>(
+                <motion.a key={i} href="#" whileHover={{ scale:1.1, y:-2 }}
+                  className="w-10 h-10 glass rounded-full flex items-center justify-center cursor-none text-base"
+                  style={{ textDecoration:"none" }}>{icon}</motion.a>
               ))}
             </div>
           </div>
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-widest mb-5" style={{ color:"rgba(255,107,157,0.6)" }}>Navigace</div>
+            <div className="t-label mb-6" style={{ color:"rgba(212,175,55,.45)", letterSpacing:".25em" }}>Navigace</div>
             {["Příchutě","Menu","Galerie","O nás","Kontakt"].map(l=>(
               <motion.a key={l} href={`#${l.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(" ","-")}`}
-                whileHover={{ x:4, color:"#FF6B9D" }}
-                className="block text-[14px] font-semibold mb-3 transition-colors" style={{ color:"rgba(255,245,230,0.35)", textDecoration:"none" }}>
+                whileHover={{ x:4, color:"var(--caramel)" }}
+                className="block t-body text-[14px] mb-3 transition-colors" style={{ color:"rgba(251,245,235,.25)", textDecoration:"none" }}>
                 {l}
               </motion.a>
             ))}
           </div>
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-widest mb-5" style={{ color:"rgba(255,107,157,0.6)" }}>Kontakt</div>
-            <div className="space-y-3 text-[14px] font-semibold" style={{ color:"rgba(255,245,230,0.4)" }}>
-              <div>📍 Náměstí Míru 12</div>
-              <div>🏙️ 293 01 Mladá Boleslav</div>
-              <div>📞 +420 326 123 456</div>
-              <div>✉️ trio@zmrzlina.cz</div>
+            <div className="t-label mb-6" style={{ color:"rgba(212,175,55,.45)", letterSpacing:".25em" }}>Kontakt</div>
+            <div className="space-y-2.5 t-body text-[14px]" style={{ color:"rgba(251,245,235,.3)" }}>
+              <div>Náměstí Míru 12</div>
+              <div>293 01 Mladá Boleslav</div>
+              <div className="pt-2">+420 326 123 456</div>
+              <div>trio@zmrzlina.cz</div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t" style={{ borderColor:"rgba(255,255,255,0.06)" }}>
-          <div className="flex items-center gap-2 text-[12px] font-semibold" style={{ color:"rgba(255,245,230,0.2)" }}>
-            <span>🍦</span>
-            <span>© 2025 Zmrzlina TRIO · Všechna práva vyhrazena</span>
-          </div>
-          <div className="flex gap-5">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8"
+          style={{ borderTop:"1px solid rgba(255,255,255,.05)" }}>
+          <div className="t-label" style={{ opacity:.2, letterSpacing:".15em" }}>© 2025 Zmrzlina TRIO · Všechna práva vyhrazena</div>
+          <div className="flex gap-6">
             {["GDPR","Podmínky","Cookies"].map(l=>(
-              <a key={l} href="#" className="text-[12px] font-semibold hover:text-pink transition-colors" style={{ color:"rgba(255,245,230,0.2)", textDecoration:"none" }}>{l}</a>
+              <a key={l} href="#" className="t-label hover:opacity-50 transition-opacity"
+                style={{ opacity:.2, letterSpacing:".15em", textDecoration:"none" }}>{l}</a>
             ))}
           </div>
         </div>

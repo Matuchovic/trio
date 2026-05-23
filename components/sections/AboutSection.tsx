@@ -1,111 +1,101 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { timeline, testimonials } from "@/lib/data";
+import { timeline } from "@/lib/data";
 
 export default function AboutSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once:true, margin:"-80px" });
+  const iv = useInView(ref, { once:true, margin:"-80px" });
 
   return (
-    <section id="o-nas" ref={ref} className="section dot-bg-yellow" style={{ background:"#FFFDE7" }}>
+    <section id="o-nas" ref={ref} className="section" style={{ background:"#0F0700" }}>
       <div className="wrap">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div initial={{ opacity:0, scale:0.8 }} animate={inView?{opacity:1,scale:1}:{}}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-bold text-sm mb-5"
-            style={{ background:"#FFF3B0", color:"#B8560A" }}>
-            ❤️ Náš příběh
-          </motion.div>
-          <div className="overflow-hidden">
-            <motion.h2 className="font-display text-5xl md:text-6xl font-semibold" style={{ color:"#2D1B10" }}
-              initial={{ y:"110%" }} animate={inView?{y:0}:{}} transition={{ duration:0.9, ease:[0.22,1,0.36,1] }}>
-              15 let <span className="grad-yellow">sladké vášně</span> 🍦
-            </motion.h2>
+        {/* Asymmetric header */}
+        <div className="grid md:grid-cols-12 gap-10 items-start mb-24">
+          <div className="md:col-span-5">
+            <motion.div initial={{ opacity:0 }} animate={iv?{opacity:1}:{}}
+              className="t-label mb-6" style={{ color:"var(--caramel)", letterSpacing:".3em" }}>
+              ✦ Náš příběh
+            </motion.div>
+            <div className="overflow-hidden mb-8">
+              <motion.h2 className="t-display font-black italic"
+                style={{ fontSize:"clamp(44px,5.5vw,80px)", color:"var(--cream)", fontFamily:"var(--display)", lineHeight:.95 }}
+                initial={{ y:"110%" }} animate={iv?{y:0}:{}} transition={{ duration:1, ease:[0.22,1,0.36,1] }}>
+                15 let<br/>čisté<br/><span className="grad-text">vášně</span>
+              </motion.h2>
+            </div>
+            <motion.p initial={{ opacity:0, y:20 }} animate={iv?{opacity:1,y:0}:{}} transition={{ delay:.3 }}
+              className="t-body text-[15px] leading-relaxed" style={{ color:"rgba(251,245,235,.5)" }}>
+              Začínali jsme s jedním stánkem, třemi příchutěmi a jedním pravidlem: žádné kompromisy. Dnes jsme stejní — jen o 15 let zkušeností bohatší.
+            </motion.p>
           </div>
-          <motion.p initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ delay:0.3 }}
-            className="text-[16px] mt-4 max-w-xl mx-auto font-semibold" style={{ color:"#6B4226", opacity:0.8 }}>
-            Začínali jsme s jedním stánkem a třemi příchutěmi. Dnes máme stovky tisíc spokojených zákazníků — ale stále stejnou lásku k zmrzlině.
-          </motion.p>
+
+          <div className="md:col-span-7 md:pl-10">
+            {/* Big year */}
+            <motion.div initial={{ opacity:0, scale:.85 }} animate={iv?{opacity:1,scale:1}:{}} transition={{ delay:.2, duration:.8 }}
+              className="relative">
+              <div className="t-display font-black italic text-right leading-none select-none"
+                style={{ fontSize:"clamp(80px,16vw,200px)", color:"rgba(196,117,42,0.06)", fontFamily:"var(--display)" }}>
+                2009
+              </div>
+              <motion.div className="absolute inset-0 flex items-center justify-end pr-8"
+                animate={{ rotate:[0,1,-1,0] }} transition={{ duration:6, repeat:Infinity, ease:"easeInOut" }}>
+                <div className="text-center">
+                  <div className="text-6xl mb-2 float">🍦</div>
+                  <div className="t-label" style={{ color:"var(--caramel)", letterSpacing:".2em" }}>est. 2009</div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Timeline */}
-        <div className="max-w-3xl mx-auto mb-20">
-          {timeline.map((item, i) => {
+        <div className="relative max-w-3xl">
+          <div className="absolute left-0 top-0 bottom-0 w-px"
+            style={{ background:"linear-gradient(to bottom, transparent, rgba(212,175,55,.25) 10%, rgba(212,175,55,.25) 90%, transparent)" }} />
+
+          {timeline.map((item,i)=>{
             const itemRef = useRef(null);
-            const itemInView = useInView(itemRef, { once:true, margin:"-40px" });
-            const isLeft = i%2 === 0;
-            const colors = ["#FF6B9D","#FFD93D","#6BCB77","#4ECDC4","#C77DFF"];
-            const c = colors[i % colors.length];
+            const itemIV = useInView(itemRef, { once:true, margin:"-60px" });
             return (
               <motion.div key={item.year} ref={itemRef}
-                initial={{ opacity:0, x: isLeft ? -50 : 50 }}
-                animate={itemInView ? { opacity:1, x:0 } : {}}
-                transition={{ duration:0.8, ease:[0.22,1,0.36,1] }}
-                className={`flex items-center gap-6 mb-10 last:mb-0 ${isLeft ? "flex-row" : "flex-row-reverse"}`}>
-                <div className={`flex-1 bg-white rounded-3xl p-6 shadow-sm ${isLeft ? "text-right" : "text-left"}`}
-                  style={{ border:`2px solid ${c}30` }}>
-                  <div className="text-xl font-bold mb-1" style={{ color:c }}>{item.year}</div>
-                  <h3 className="font-display text-xl font-semibold mb-1" style={{ color:"#2D1B10" }}>{item.title}</h3>
-                  <p className="text-[13px] leading-relaxed" style={{ color:"#6B4226", opacity:0.8 }}>{item.desc}</p>
-                </div>
-                <div className="relative flex-shrink-0">
-                  <motion.div animate={itemInView ? { scale:[0.5,1.3,1] } : {}} transition={{ duration:0.6, delay:0.2 }}
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl relative z-10"
-                    style={{ background:c, boxShadow:`0 8px 24px ${c}50` }}>
-                    🍦
-                  </motion.div>
-                  <motion.div className="absolute inset-0 rounded-full" style={{ background:c }}
-                    animate={itemInView ? { scale:[1,2.5], opacity:[0.5,0] } : {}}
-                    transition={{ duration:1.5, repeat:Infinity, delay:i*0.4 }} />
-                </div>
-                <div className="flex-1" />
+                initial={{ opacity:0, x:-40 }} animate={itemIV?{opacity:1,x:0}:{}}
+                transition={{ duration:.8, ease:[0.22,1,0.36,1] }}
+                className="pl-12 pb-14 last:pb-0 relative">
+                {/* Dot */}
+                <motion.div animate={itemIV?{scale:[.5,1.3,1]}:{}} transition={{ duration:.6, delay:.2 }}
+                  className="absolute left-0 top-1 w-3 h-3 -translate-x-1/2 rounded-full border-2 z-10"
+                  style={{ borderColor:"var(--caramel)", background:"var(--ink)" }} />
+                <motion.div className="absolute left-0 top-1 w-3 h-3 -translate-x-1/2 rounded-full"
+                  style={{ background:"rgba(196,117,42,.3)" }}
+                  animate={itemIV?{scale:[1,2.5],opacity:[.6,0]}:{}}
+                  transition={{ duration:1.5, repeat:Infinity, delay:i*.4 }} />
+
+                <div className="t-label mb-2" style={{ color:"var(--caramel)", letterSpacing:".2em" }}>{item.year}</div>
+                <h3 className="t-display text-xl font-bold italic mb-2" style={{ color:"var(--cream)", fontFamily:"var(--display)" }}>{item.title}</h3>
+                <p className="t-body text-[14px] leading-relaxed" style={{ color:"rgba(251,245,235,.45)" }}>{item.desc}</p>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Testimonials */}
-        <div className="mb-4 text-center">
-          <h3 className="font-display text-3xl font-semibold mb-10" style={{ color:"#2D1B10" }}>Co říkají zákazníci 💬</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => {
-            const tRef = useRef(null);
-            const tInView = useInView(tRef, { once:true });
-            const colors = ["#FF6B9D","#FFD93D","#6BCB77","#4ECDC4","#C77DFF"];
-            return (
-              <motion.div key={t.name} ref={tRef}
-                initial={{ opacity:0, y:30, rotate: i%2===0 ? -1 : 1 }}
-                animate={tInView ? { opacity:1, y:0, rotate:0 } : {}}
-                transition={{ delay:i*0.1, duration:0.7 }}
-                whileHover={{ y:-6, rotate: i%2===0 ? 1 : -1 }}
-                className="bg-white rounded-3xl p-6 cursor-none"
-                style={{ boxShadow:"0 4px 20px rgba(0,0,0,0.07)", border:`2px solid ${colors[i%5]}20` }}>
-                <div className="text-3xl mb-3">{t.emoji}</div>
-                <div className="text-yellow text-base font-bold mb-2">{"★".repeat(t.stars)}</div>
-                <p className="text-[14px] leading-relaxed mb-4 font-semibold" style={{ color:"#2D1B10" }}>"{t.text}"</p>
-                <div className="text-[12px] font-bold uppercase tracking-wider" style={{ color:colors[i%5] }}>{t.name}</div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Values */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14">
-          {[{e:"🌱",t:"Lokální suroviny",d:"Jahody od sousedů"},{e:"🚫",t:"Bez éček",d:"Žádná chemie"},{e:"⏰",t:"Denně čerstvé",d:"Ráno připraveno"},{e:"❤️",t:"S láskou",d:"Každý kopeček"}].map((v,i)=>{
-            const cs=["#FF6B9D","#FFD93D","#6BCB77","#4ECDC4"];
-            return (
-              <motion.div key={v.t} initial={{ opacity:0, scale:0.85 }} whileInView={{ opacity:1, scale:1 }} viewport={{ once:true }}
-                transition={{ delay:i*0.1 }} whileHover={{ y:-6, rotate: i%2===0 ? 1 : -1 }}
-                className="bg-white rounded-3xl p-6 text-center cursor-none"
-                style={{ boxShadow:`0 4px 20px ${cs[i]}25`, border:`2px solid ${cs[i]}30` }}>
-                <div className="text-4xl mb-3">{v.e}</div>
-                <div className="font-bold text-[14px] mb-1" style={{ color:"#2D1B10" }}>{v.t}</div>
-                <div className="text-[12px]" style={{ color:cs[i] }}>{v.d}</div>
-              </motion.div>
-            );
-          })}
+        {/* Values grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-24 pt-16"
+          style={{ borderTop:"1px solid rgba(212,175,55,.1)" }}>
+          {[
+            { icon:"🌱", t:"Lokální suroviny", d:"Jahody od sousedů. Mléko od sousedů." },
+            { icon:"🚫", t:"Bez éček", d:"Žádná umělá barviva ani konzervanty." },
+            { icon:"⏰", t:"Denně čerstvé", d:"Vyrábíme každé ráno, nikdy den starší." },
+            { icon:"🏆", t:"Grand Cru", d:"Suroviny z prestižních světových oblastí." },
+          ].map((v,i)=>(
+            <motion.div key={v.t} initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
+              transition={{ delay:i*.1 }} whileHover={{ y:-5 }}
+              className="glass rounded-2xl p-6 cursor-none">
+              <div className="text-2xl mb-4">{v.icon}</div>
+              <div className="font-semibold text-[14px] mb-2" style={{ color:"var(--cream)", fontFamily:"var(--body)" }}>{v.t}</div>
+              <div className="text-[12px] leading-relaxed" style={{ color:"rgba(251,245,235,.4)" }}>{v.d}</div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

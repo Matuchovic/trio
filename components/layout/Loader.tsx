@@ -10,10 +10,10 @@ export default function Loader() {
   useEffect(() => {
     let v = 0;
     const iv = setInterval(() => {
-      v += Math.random() * 20 + 5;
-      if (v >= 100) { clearInterval(iv); v = 100; setTimeout(() => setOut(true), 400); setTimeout(() => setGone(true), 1400); }
+      v += Math.random() * 16 + 4;
+      if (v >= 100) { clearInterval(iv); v = 100; setTimeout(() => setOut(true), 600); setTimeout(() => setGone(true), 1700); }
       setPct(Math.min(Math.round(v), 100));
-    }, 80);
+    }, 85);
     return () => clearInterval(iv);
   }, []);
 
@@ -22,42 +22,53 @@ export default function Loader() {
   return (
     <AnimatePresence>
       {!out && (
-        <motion.div key="loader" exit={{ y: "-100%" }} transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-[9000] flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: "linear-gradient(135deg, #FF6B9D 0%, #FF4757 40%, #FF9F43 100%)" }}>
-
-          {/* Floating blobs */}
-          {[{w:300,x:"10%",y:"20%",c:"rgba(255,255,255,0.12)"},{w:200,x:"75%",y:"60%",c:"rgba(255,255,255,0.08)"},{w:150,x:"50%",y:"10%",c:"rgba(255,255,255,0.1)"}].map((b,i)=>(
-            <motion.div key={i} className="absolute rounded-full pointer-events-none"
-              style={{ width:b.w, height:b.w, left:b.x, top:b.y, background:b.c }}
-              animate={{ scale:[1,1.2,1], y:[0,-20,0] }} transition={{ duration:3+i, repeat:Infinity, ease:"easeInOut", delay:i*0.5 }} />
+        <motion.div key="loader"
+          exit={{ clipPath:"inset(0 0 100% 0)", transition:{ duration:1.1, ease:[0.76,0,0.24,1] } }}
+          className="fixed inset-0 z-[9000] flex flex-col items-center justify-center overflow-hidden grad-dark"
+        >
+          {/* Rotating orbital rings */}
+          {[200,310,420].map((s,i)=>(
+            <motion.div key={i} className="absolute rounded-full border"
+              style={{ width:s, height:s, borderColor:`rgba(196,117,42,${0.14-i*.04})` }}
+              animate={{ rotate:360 }}
+              transition={{ duration:12+i*6, repeat:Infinity, ease:"linear" }} />
           ))}
 
-          {/* Content */}
-          <motion.div initial={{ scale:0, rotate:-10 }} animate={{ scale:1, rotate:0 }}
-            transition={{ type:"spring", stiffness:200, damping:15 }} className="relative z-10 text-center">
-            <div className="text-[80px] mb-4">🍦</div>
-            <div className="font-display text-6xl font-semibold text-white mb-1 tracking-wide">TRIO</div>
-            <div className="text-white/70 text-sm font-semibold uppercase tracking-widest mb-10">Točená zmrzlina · Mladá Boleslav</div>
+          {/* Ambient glow */}
+          <div className="absolute w-96 h-96 rounded-full pointer-events-none"
+            style={{ background:"radial-gradient(circle, rgba(196,117,42,0.12) 0%, transparent 70%)" }} />
+
+          <motion.div
+            initial={{ opacity:0, scale:0.85 }}
+            animate={{ opacity:1, scale:1 }}
+            transition={{ duration:0.8, ease:[0.22,1,0.36,1] }}
+            className="relative z-10 text-center"
+          >
+            <div className="t-label text-caramel mb-8 tracking-[.5em]">Točená zmrzlina</div>
+
+            <div className="t-display text-[80px] leading-none font-black italic mb-2"
+              style={{ color:"var(--cream)" }}>
+              TRIO
+            </div>
+
+            <div className="t-label mb-14" style={{ color:"rgba(251,245,235,0.35)", letterSpacing:".3em" }}>
+              Mladá Boleslav · est. 2009
+            </div>
 
             {/* Progress */}
-            <div className="w-52 mx-auto">
-              <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-3">
-                <motion.div className="h-full bg-white rounded-full" animate={{ width:`${pct}%` }} transition={{ duration:0.15 }} />
+            <div className="w-40 mx-auto">
+              <div className="h-px bg-cream/10 overflow-hidden mb-3">
+                <motion.div className="h-full origin-left"
+                  style={{ background:"linear-gradient(90deg, var(--caramel), var(--gold))" }}
+                  animate={{ scaleX: pct/100 }}
+                  transition={{ duration:.15, ease:"linear" }} />
               </div>
-              <div className="flex justify-between text-white/60 text-xs font-bold">
-                <span>Připravujeme zážitek…</span>
-                <span>{pct}%</span>
+              <div className="flex justify-between items-center">
+                <span className="t-label" style={{ opacity:.3, letterSpacing:".15em" }}>Načítám</span>
+                <span className="font-mono text-[11px]" style={{ color:"var(--caramel)", opacity:.7 }}>{pct}%</span>
               </div>
             </div>
           </motion.div>
-
-          {/* Bottom emoji strip */}
-          <div className="absolute bottom-8 flex gap-6 text-3xl">
-            {["🍓","🍫","🌿","🌰","🥭","🍯"].map((e,i)=>(
-              <motion.span key={i} animate={{ y:[0,-8,0] }} transition={{ duration:1.5, repeat:Infinity, delay:i*0.2 }}>{e}</motion.span>
-            ))}
-          </div>
         </motion.div>
       )}
     </AnimatePresence>

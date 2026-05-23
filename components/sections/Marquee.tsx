@@ -1,15 +1,16 @@
 "use client";
-const items = ["🍦 Točená zmrzlina","🍫 Belgická čokoláda","🌿 Madagaskarská vanilka","🍓 Čerstvá jahoda","🌰 Sicilská pistácie","🥭 Mango & Maracuja","🍯 Slaný karamel","🍋 Citronový sorbet","🥥 Kokos & limetka","🍇 Malina & bílá čokoláda"];
+const items = ["Belgická čokoláda","Madagascar Vanilla","Čerstvá jahoda","Sicilská pistácie","Slaný karamel","Mango & Maracuja","Citronový sorbet","Malina Bílá čokoláda","Grand Cru Reserve"];
 export default function Marquee() {
-  const doubled = [...items,...items];
+  const d = [...items,...items];
   return (
-    <div className="py-4 overflow-hidden border-y-2" style={{ background:"#5C3317", borderColor:"#3D1F0D" }}>
-      <div className="flex whitespace-nowrap" style={{ animation:"marquee 20s linear infinite", width:"max-content" }}>
-        {doubled.map((item,i)=>(
-          <span key={i} className="inline-flex items-center mx-8 text-[13px] font-bold"
-            style={{ color: i%3===0?"#FFD93D":i%3===1?"rgba(255,245,230,0.6)":"#FF6B9D" }}>
+    <div className="py-4 overflow-hidden" style={{ background:"var(--chocolate)", borderTop:"1px solid rgba(212,175,55,.1)", borderBottom:"1px solid rgba(212,175,55,.1)" }}>
+      <div className="flex whitespace-nowrap" style={{ animation:"marquee 24s linear infinite", width:"max-content" }}>
+        {d.map((item,i)=>(
+          <span key={i} className="inline-flex items-center mx-10"
+            style={{ fontFamily:"var(--mono)", fontSize:"10px", letterSpacing:".28em", textTransform:"uppercase",
+              color: i%3===0?"var(--caramel)":i%3===1?"rgba(251,245,235,.3)":"rgba(212,175,55,.5)" }}>
             {item}
-            <span className="ml-8 opacity-30" style={{ color:"#FFD93D" }}>✦</span>
+            <span className="ml-10" style={{ color:"var(--gold)", opacity:.2 }}>◆</span>
           </span>
         ))}
       </div>
